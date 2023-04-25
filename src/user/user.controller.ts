@@ -1,5 +1,7 @@
 import { Controller, Get, Req, UseGuards } from '@nestjs/common';
+import { User } from '@prisma/client';
 import { Request } from 'express';
+import { GetUser } from 'src/auth/decorator/get-user.docrarator';
 import { JwtGuard } from 'src/auth/guard';
 
 @Controller('users')
@@ -7,7 +9,7 @@ export class UserController {
 
   @UseGuards(JwtGuard)
   @Get('me')
-  async getCurrentUser(@Req() req: Request) {
-    return req.user
+  async getCurrentUser(@GetUser() user: User) {
+    return user
   }
 }
