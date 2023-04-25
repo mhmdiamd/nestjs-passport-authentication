@@ -1,8 +1,10 @@
-import { ValidationPipe } from '@nestjs/common';
+import { ValidationPipe, Post } from '@nestjs/common';
 import { Test } from '@nestjs/testing';
 import { AppModule } from '../src/app.module';
 import { NestApplication } from '@nestjs/core';
-import { PrismaService } from 'src/prisma/prisma.service';
+import * as pactum from 'pactum'
+import { PrismaService } from '../src/prisma/prisma.service';
+import { AuthDto } from 'src/auth/dto/auth.dto';
 
 describe('App e2e', () => {
   let app: NestApplication
@@ -20,6 +22,7 @@ describe('App e2e', () => {
     )
 
     await app.init()
+    await app.listen(3001)
 
     prisma = app.get(PrismaService)
     await prisma.cleanDb()
@@ -31,39 +34,51 @@ describe('App e2e', () => {
   })
 
   describe('Auth',  () => {
+
+    
+    describe('Signup', () => {
+      it('should signup', () => {
+        const dto: AuthDto = {
+          email: "am@gmail.com",
+         password: "password" 
+        }
+
+        return pactum.spec().post('http://localhost:3000/auth/signup')
+        .withBody(dto)
+        .expectStatus(201)
+      })
+    })
+
     describe('Signin', () => {
 
     })
 
-    describe('Signup', () => {
-
-    })
   })
 
   describe('User', () => {
-    describe('Get Current user', async () => {
+    describe('Get Current user',  () => {
 
     })
   })
 
   describe('Bookmark', () => {
-    describe('Create Bookmarks', async () => {
+    describe('Create Bookmarks', () => {
 
     })
 
-    describe('Get Bookmarks', async () => {
+    describe('Get Bookmarks', () => {
 
     })
 
-    describe('Delete Bookmark By Id', async () => {
+    describe('Delete Bookmark By Id', () => {
 
     })
 
-    describe('Edit Bookmarks', async () => {
+    describe('Edit Bookmarks', () => {
 
     })
 
-    describe('Delete Bookmarks', async () => {
+    describe('Delete Bookmarks', () => {
 
     })
   })
